@@ -1,0 +1,218 @@
+﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
+using WorldAttractions.DAL.EF;
+using WorldAttractions.DAL.Models.Information;
+using WorldAttractions.DAL.Models.Users;
+
+namespace CarRentalSystem.Controllers
+{
+    public class AccountController : Controller
+    {
+        UnitOfWork unit = new UnitOfWork();
+
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Index()
+        {
+            return View(unit.Users.GetAll().ToList());
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult Edit(int? id)
+        {
+            ViewBag.Roles = new SelectList(unit.Roles.GetAll(), "Id", "Name");
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            User user = unit.Users.GetById(id);//db.Monuments.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        // POST: Monuments/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Edit(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                user.Role = unit.Roles.GetById(user.RoleId);
+                unit.Users.Update(user);
+                unit.Save();
+                return RedirectToAction("Index");
+            }
+            return View(user);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(LoginModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // поиск пользователя в бд
+                User user = null;
+                using (BelarusAttractionsContext db = new BelarusAttractionsContext())
+                {
+                    user = unit.Users.GetAll().FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+                }
+                if (user != null)
+                {
+                    FormsAuthentication.SetAuthCookie(model.Email, true);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("Password", "Пользователя с таким логином и паролем нет");
+                }
+            }
+
+            return View(model);
+        }
+
+        public ActionResult Profile()
+        {
+            User user = unit.Users.GetAll().FirstOrDefault(u => u.Email == User.Identity.Name);
+            EditModel edit = new EditModel
+            {
+                Email = user.Email,
+                ConfirmPassword = user.ConfirmPassword,
+                FirstName = user.FirstName,
+                Gender = user.Gender,
+                LastName = user.LastName,
+                Password = user.Password,
+                Id = user.Id,
+                Skype = user.Skype,
+                Telephone = user.Telephone
+            };
+            return View(edit);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Profile(EditModel edit)
+        {
+            User user = unit.Users.GetAll().FirstOrDefault(u => u.Email == User.Identity.Name);
+
+            if (ModelState.IsValid)
+            {
+                user.Telephone = edit.Telephone;
+                user.Skype = edit.Skype;
+                user.Password = edit.Password;
+                user.LastName = edit.LastName;
+                user.Gender = edit.Gender;
+                user.FirstName = edit.FirstName;
+                user.Email = edit.Email;
+                user.ConfirmPassword = edit.ConfirmPassword;
+                unit.Users.Update(user);
+                unit.Save();
+                return RedirectToAction("Index", "Home");
+            }
+            return View(user);
+        }
+        public ActionResult Registration()
+        {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            User user = unit.Users.GetById(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        // POST: Monuments/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            User user = unit.Users.GetById(id);
+            unit.Users.Delete(user.Id);
+            unit.Save();
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Registration(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = null;
+                using (BelarusAttractionsContext db = new BelarusAttractionsContext())
+                {
+                    user = unit.Users.GetAll().FirstOrDefault(u => u.Email == model.Email);
+                }
+                if (user == null)
+                {
+                    // создаем нового пользователя
+                    using (BelarusAttractionsContext db = new BelarusAttractionsContext())
+                    {
+                        unit.Users.Create(new User
+                        {
+                            Email = model.Email,
+                            Password = model.Password,
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            ConfirmPassword = model.ConfirmPassword,
+                            Gender = model.Gender,
+                            Skype = model.Skype,
+                            Telephone = model.Telephone,
+                            RoleId = 3
+                        });
+                        unit.Save();
+                        //db.SaveChanges();
+                        user = unit.Users.GetAll().Where(u => u.Email == model.Email && u.Password == model.Password).FirstOrDefault();
+                    }
+                    // если пользователь удачно добавлен в бд
+                    if (user != null)
+                    {
+                        FormsAuthentication.SetAuthCookie(model.Email, true);
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", "Пользователь с таким логином уже существует");
+                }
+            }
+            return View(model);
+        }
+
+        public ActionResult Logoff()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index", "Home");
+        }
+    }
+}

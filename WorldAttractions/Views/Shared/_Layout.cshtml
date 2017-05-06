@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Home</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/menu.css" />
+
+</head>
+
+<body>
+    @{
+        var unit = new WorldAttractions.DAL.Models.Information.UnitOfWork();
+        var Districts = unit.Districts.GetAll().ToList();
+    }
+
+    <div class="header">
+        <ul class="header-menu">
+            
+            <li>
+                @Html.ActionLink("HOME", "Index", "Home")
+            </li>
+
+            <li>
+                @Html.ActionLink("MONUMENTS", "Index", "Monuments")
+            </li>
+            <li>
+                <a href="#">DISTRICTS</a>
+                <ul id="submenu">
+                    @for (int i = 0; i < Districts.Count; i++)
+                    {
+                        <li><a href="@Url.Action("Index", "Districts", new { Districts[i].Id })">@Districts[i].Name</a></li>
+                    }
+                </ul>
+            </li>
+            @if (User.IsInRole("Admin")&&User.Identity.IsAuthenticated)
+            {
+            <li>
+                @Html.ActionLink("All users", "Index", "Account", new { area = "" }, new { @class = "active" })
+            </li>
+            }
+        </ul>
+        <div class="header-login">
+            <ul>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        @Html.ActionLink("Profile", "Profile", "Account", new { area = "" }, new { @class = "active" })
+                    </li>
+                    <li>
+                        @Html.ActionLink("Log out", "Logoff", "Account", new { area = "" }, new { @class = "active" })
+                    </li>
+               
+                }
+                else
+                {
+                    <li>
+                        @Html.ActionLink("Registration", "Registration", "Account", new { area = "" }, new { @class = "active" })
+                    </li>
+                    <li>
+                        @Html.ActionLink("Login", "Login", "Account", new { area = "" }, new { @class = "active" })
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <footer>
+            <hr />
+
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,54 @@
+﻿@model WorldAttractions.DAL.Models.Showplace.District
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <h2>All monuments in @Model.Name</h2>
+    <p>
+
+
+    </p>
+        <div class="drivers">
+            <ul>
+                @foreach (var item in Model.Cities)
+                {
+                    foreach (var subitem in item.Monuments)
+                    { 
+                    <li class="blck">
+                        <div class="text">
+                            @if (subitem.Pictures.Count > 0)
+                            {
+                                <a href="@Url.Action("Details", "Monuments", new { subitem.Id })">
+                                    <div class="image">
+                                        <img src=@subitem.Pictures[0].Path />
+                                    </div>
+                                    <p>@subitem.Name</p>
+                                    <p class="id">@subitem.City.Name</p>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Details", "Monuments", new { subitem.Id })">
+                                    <div class="image">
+                                        <img src="~/Images/mark.jpg" />
+                                    </div>
+                                    <p>@subitem.Name</p>
+                                    <p class="id">@subitem.City.Name</p>
+                                </a>
+                            }
+                        </div>
+                    </li>
+                    }
+                }
+            </ul>
+        </div>
+
+    @Html.ActionLink("View all monuments", "Index", "Monuments", null, new { @class = "btn btn-default grey" })
+
+
+</body>
+</html>

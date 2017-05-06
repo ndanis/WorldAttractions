@@ -1,0 +1,46 @@
+﻿@model IEnumerable<WorldAttractions.DAL.Models.Showplace.Monument>
+
+@{
+    ViewBag.Title = "All monuments";
+}
+
+<h2>All monuments</h2>
+
+
+<div class="drivers">
+    <ul>
+        @foreach (var monument in Model)
+        {
+            <li class="blck">
+                <div class="text">
+                    @if (monument.Pictures.Count > 0)
+                    {
+                        <a href="@Url.Action("Details", "Monuments", new {monument.Id})">
+                            <div class="image">
+                                <img src="@monument.Pictures[0].Path">
+                            </div>
+                            <p>@monument.Name</p>
+                            <p class="id">@monument.City.Name</p>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Details", "Monuments", new {monument.Id})">
+                            <div class="image">
+                                <img src="~/Images/mark.jpg" />
+                            </div>
+                            <p>@monument.Name</p>
+                            <p class="id">@monument.City.Name</p>
+                        </a>
+                    }
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+<p>
+    @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+    {
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default grey" })
+    }
+</p>

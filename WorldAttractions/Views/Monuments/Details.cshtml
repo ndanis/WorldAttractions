@@ -1,0 +1,71 @@
+﻿@model WorldAttractions.DAL.Models.Showplace.Monument
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <script>
+
+        jQuery(document).ready(function ($) {
+
+            $('.carousel').carousel(
+                {
+                }
+                );
+        });
+
+    </script>
+    <h4>Monument</h4>
+    <hr />
+    @if (Model.Pictures.Count != 0)
+    {
+        <div class="carousel" style="height:700px;">
+            @for (int i = 0; i < Model.Pictures.Count; i++)
+            {
+                <a class="carousel-item" style="width:70%; height:700px;"><img style="height:700px;" src=@Model.Pictures.ToList()[i].Path /></a>
+            }
+        </div>
+    }
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.City.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+       
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default grey" })
+    @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default grey" })
+    }
+    @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+    {
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-default grey" })
+    }
+
+</p>

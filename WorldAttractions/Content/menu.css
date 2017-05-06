@@ -1,0 +1,236 @@
+﻿.body {
+    background-size: 100%;
+    padding: 0;
+}
+
+.last a {
+    color: #ff0000 !important;
+    background: #000 !important;
+}
+
+.header-menu .last a:hover {
+    transition-property: color,background;
+    transition: 0.5s;
+    background: #808080;
+    color: #000;
+}
+
+.header {
+    width: 100%;
+    background: #808080;
+    display: table; /* centers modern browsers */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-logo {
+    width:10%;
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.header-menu {
+    width: 60%;
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+    .header-menu li a {
+    }
+
+
+
+    .header-menu li {
+        float: left;
+        position: relative;
+        display: block;
+        width: 16%;
+        background: #808080;
+    }
+
+        .header-menu li a {
+            color: #fff;
+            line-height: 5;
+            display: block;
+            height: 60px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            transition-property: color;
+            transition: 0.5s;
+        }
+
+    .header-menu:hover li a {
+        transition-property: color;
+        transition: 0.5s;
+        color: #d3d0d4;
+    }
+
+
+
+    .header-menu li a:hover {
+        color: #fff;
+        transition-property: background;
+        transition: 0.5s;
+        background: #ff0000;
+        display: block;
+    }
+
+    .header-menu li:hover #submenu{
+        display:block;
+    }
+
+#submenu {
+    position: absolute;
+    left: 0;
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
+    #submenu li {
+        width:100%;
+    
+    }
+    
+.header-login {
+    float: right;
+    margin: 0;
+    padding: 0;
+}
+
+    .header-login li {
+        float: left;
+        position: relative;
+        display: block;
+        width: 191px;
+        background: #000;
+    }
+
+        .header-login li a {
+            line-height: 5;
+            display: block;
+            height: 60px;
+            text-decoration: none;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .header-login li:hover {
+            background: #ff0000;
+        }
+
+        .header-login li a:hover {
+            display: block;
+        }
+        
+
+.drivers .blck {
+    clear: both;
+    display: inline-block;
+    width: 24%;
+    height: auto;
+    vertical-align: top;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.drivers {
+    clear: both;
+    text-align: center;
+    width: 100%;
+}
+
+    .drivers ul {
+        width: 100%;
+    }
+
+.blck .image {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+    .blck .image img {
+        -moz-transition: all 1s ease-out;
+        -o-transition: all 1s ease-out;
+        -webkit-transition: all 1s ease-out;
+    }
+
+.blck:hover .image img {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+}
+
+.blck img {
+    height: 100%;
+    width: 100%;
+}
+
+.blck {
+    margin-top: 20px;
+}
+
+    .blck a {
+        font-size: large;
+        font-family: fantasy;
+        color: #000;
+    }
+
+    .blck .text {
+        font-size: large;
+        font-family: fantasy;
+        color: #000;
+    }
+
+        .blck .text a {
+            font-size: large;
+            font-family: fantasy;
+            color: #000;
+        }
+
+    .blck:hover .text a {
+        transition-property: margin-top,color;
+        margin-top: 0px;
+        color: #fff;
+        transition-duration: 0.5s;
+    }
+
+    .blck:hover .text a {
+        transition-property: color;
+        margin-top: 0px;
+        color: #fff;
+        transition-duration: 0.5s;
+    }
+
+    .blck:hover .text {
+        transition-property: background;
+        transition-duration: 0.5s;
+        background: #000;
+    }
+
+        .blck:hover .text p {
+            transition-property: margin-top,color;
+            margin-top: 0px;
+            color: #fff;
+            transition-duration: 0.5s;
+        }
+
+    .blck .text .id {
+        opacity: 0.0;
+        color: #fff;
+    }
+
+    .blck:hover .text .id {
+        transition-property: opacity,color;
+        opacity: 1;
+        color: #fff;
+        transition-duration: 0.5s;
+    }
